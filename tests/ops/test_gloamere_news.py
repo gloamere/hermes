@@ -1,13 +1,13 @@
 """Release feed selection must exclude noisy prereleases and stale updates."""
 import importlib.util
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 SOURCE = Path(__file__).resolve().parents[2] / "ops/gloamere/news_digest.py"
 SPEC = importlib.util.spec_from_file_location("gloamere_news_digest", SOURCE)
 news = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(news)
-NOW = datetime(2026, 10, 10, 1, 30, tzinfo=timezone.utc)
+NOW = datetime(2026, 10, 10, 1, 30, tzinfo=UTC)
 
 
 def feed(title, *, date="2026-10-09T12:00:00Z", url="https://github.com/example/project/releases/tag/v1"):

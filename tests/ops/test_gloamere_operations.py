@@ -1,5 +1,5 @@
 """Behavior contracts for bounded backups, symlink handling, and host notifications."""
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from types import SimpleNamespace
 import tarfile
@@ -23,9 +23,9 @@ def snapshot(day, size=100):
 
 
 def test_retention_preserves_recent_days_and_last_snapshot_of_each_month(ops):
-    now = datetime(2026, 10, 9, 9, tzinfo=timezone.utc)
+    now = datetime(2026, 10, 9, 9, tzinfo=UTC)
     recent = [snapshot(now - timedelta(days=i)) for i in range(90)]
-    monthly = [snapshot(datetime(2026, month, 20, 9, tzinfo=timezone.utc)) for month in range(1, 8)]
+    monthly = [snapshot(datetime(2026, month, 20, 9, tzinfo=UTC)) for month in range(1, 8)]
     unrelated = {"tag_name": "manual-archive", "assets": [{"size": 100}]}
     kept, removed = ops.retention.plan_retention(recent + monthly + [unrelated], now,
                                                daily_days=30, monthly_months=12, max_bytes=100000)
@@ -37,7 +37,7 @@ def test_retention_preserves_recent_days_and_last_snapshot_of_each_month(ops):
 
 
 def test_quota_drops_oldest_but_never_the_last_restore_point(ops):
-    now = datetime(2026, 10, 9, 9, tzinfo=timezone.utc)
+    now = datetime(2026, 10, 9, 9, tzinfo=UTC)
     releases = [snapshot(now - timedelta(days=i)) for i in range(4)]
     kept, removed = ops.retention.plan_retention(releases, now, daily_days=30,
                                                monthly_months=12, max_bytes=200)
@@ -86,7 +86,7 @@ def test_remote_digest_mismatch_stops_validation(ops, monkeypatch, tmp_path):
 
 
 def test_incomplete_upload_cannot_replace_verified_restore_point(ops, monkeypatch, tmp_path):
-    now = datetime(2026, 10, 9, 9, tzinfo=timezone.utc)
+    now = datetime(2026, 10, 9, 9, tzinfo=UTC)
     complete = snapshot(now - timedelta(hours=1))
     complete["body"] = ops.backup.VERIFIED_MARKER
     incomplete = snapshot(now)

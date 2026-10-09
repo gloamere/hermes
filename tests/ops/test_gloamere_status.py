@@ -1,6 +1,6 @@
 """Live plugin discovery/dispatch and read-only resource/backup query contracts."""
 from contextlib import nullcontext
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from types import SimpleNamespace
 import json
@@ -178,7 +178,7 @@ def test_resource_report_preserves_zero_temperature_and_unhealthy_ssd(query):
               "temperatures": {"cpu": 0, "ssd": None}, "services": {"hermes-gateway.service": {"ActiveState": "failed"}},
               "smart": {"smart_status": {"passed": True}, "nvme_smart_health_information_log": {
                   "critical_warning": 0, "media_errors": 1, "percentage_used": 7}}}
-    result = query.server_report(sample, datetime.now(timezone.utc))
+    result = query.server_report(sample, datetime.now(UTC))
     assert "CPU 温度：0.0℃" in result
     assert "固态温度：未读到传感器" in result
     assert "固态健康：异常" in result
@@ -188,11 +188,11 @@ def test_resource_report_preserves_zero_temperature_and_unhealthy_ssd(query):
 @pytest.mark.parametrize("state,expected", [({}, "尚无成功记录"), ({"status": "failed"}, "失败"),
     ({"status": "success", "finished_at": "invalid"}, "时间无效"), ({"_invalid": True}, "损坏")])
 def test_missing_failed_or_corrupt_backup_is_never_reported_as_success(query, state, expected):
-    assert expected in query.backup_health(state, datetime.now(timezone.utc))
+    assert expected in query.backup_health(state, datetime.now(UTC))
 
 
 def test_stale_and_future_success_timestamps_are_flagged(query):
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     stale = {"status": "success", "finished_at": (now - timedelta(hours=37)).isoformat()}
     future = {"status": "success", "finished_at": (now + timedelta(hours=1)).isoformat()}
     assert "超过 36 小时" in query.backup_health(stale, now)
@@ -222,7 +222,7 @@ def test_backup_report_is_read_only_and_survives_corrupt_status(query, monkeypat
     result = query.backups_report({"backup_status": str(state)}, {
         "hermes_home": str(home), "repository": str(tmp_path / "repo"), "daily_keep_days": 30,
         "monthly_keep_months": 12, "remote_max_bytes": 10000, "workspace_max_bytes": 10000,
-        "workspace_max_file_bytes": 1000}, datetime.now(timezone.utc))
+        "workspace_max_file_bytes": 1000}, datetime.now(UTC))
     assert "状态记录损坏" in result
     assert "已纳入该包，3 项" in result
     assert "本次查询不访问 GitHub" in result

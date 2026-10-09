@@ -10,7 +10,7 @@ import urllib.error
 import urllib.request
 import xml.etree.ElementTree as ET
 from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta, timezone
 from pathlib import Path
 
 FEEDS = (
@@ -49,7 +49,7 @@ def entry_date(entry: ET.Element) -> datetime | None:
     if not raw:
         return None
     try:
-        return datetime.fromisoformat(raw.replace("Z", "+00:00")).astimezone(timezone.utc)
+        return datetime.fromisoformat(raw).astimezone(UTC)
     except ValueError:
         return None
 
@@ -104,7 +104,7 @@ def fetch_feed(index: int, source: str, url: str, now: datetime) -> dict:
 
 def collect() -> dict:
     DATA.mkdir(parents=True, exist_ok=True, mode=0o700)
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     with ThreadPoolExecutor(max_workers=3) as pool:
         futures = [pool.submit(fetch_feed, index, source, url, now)
                    for index, (source, url) in enumerate(FEEDS)]
