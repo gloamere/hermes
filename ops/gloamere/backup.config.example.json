@@ -1,0 +1,18 @@
+{
+  "repository": "/var/lib/hermes-backup/repository",
+  "repository_slug": "gloamere/hermes-backups",
+  "hermes_home": "/home/Gloamere/.hermes",
+  "source": "/home/Gloamere/hermes",
+  "recipient_file": "/etc/hermes-backup/recipients.txt",
+  "user": "gloamere",
+  "timezone": "Asia/Shanghai",
+  "proxy": "http://127.0.0.1:7890",
+  "workspace": "/home/Gloamere/workspace",
+  "daily_keep_days": 30,
+  "monthly_keep_months": 12,
+  "remote_max_bytes": 5368709120,
+  "snapshot_max_bytes": 536870912,
+  "workspace_max_bytes": 2147483648,
+  "workspace_max_file_bytes": 268435456,
+  "chunk_bytes": 67108864
+}

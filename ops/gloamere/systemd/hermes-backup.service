@@ -1,0 +1,20 @@
+[Unit]
+Description=Hermes encrypted daily backup to private GitHub repository
+Wants=network-online.target mihomo.service
+After=network-online.target mihomo.service
+StartLimitIntervalSec=24h
+StartLimitBurst=4
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+UMask=0077
+ExecStart=/usr/local/sbin/hermes-backup
+TimeoutStartSec=2h
+Restart=on-failure
+RestartSec=15min
+RestartPreventExitStatus=2
+Nice=10
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
