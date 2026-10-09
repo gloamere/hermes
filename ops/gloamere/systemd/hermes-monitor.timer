@@ -1,0 +1,8 @@
+[Unit]
+Description=Check Hermes host health every two minutes
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=2min
+AccuracySec=5s
+[Install]
+WantedBy=timers.target

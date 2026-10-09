@@ -1,0 +1,10 @@
+[Unit]
+Description=Telegram notification for failed unit %i
+After=network-online.target mihomo.service
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /usr/local/lib/hermes-ops/monitor.py failure --unit %i
+TimeoutStartSec=100
+UMask=0077
+Restart=on-failure
+RestartSec=15min

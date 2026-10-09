@@ -1,0 +1,11 @@
+[Unit]
+Description=Hermes host health checks and deduplicated Telegram alerts
+After=network-online.target mihomo.service netdata.service
+OnFailure=hermes-alert@%n.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /usr/local/lib/hermes-ops/monitor.py check
+TimeoutStartSec=150
+Nice=10
+UMask=0077

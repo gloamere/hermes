@@ -1,0 +1,19 @@
+{
+  "telegram_env": "/home/Gloamere/.hermes/.env",
+  "chat_id": "YOUR_TELEGRAM_OWNER_ID",
+  "proxy": "http://127.0.0.1:7890",
+  "timezone": "Asia/Shanghai",
+  "workspace": "/home/Gloamere/workspace",
+  "nvme_device": "/dev/nvme0n1",
+  "services": ["hermes-gateway.service", "mihomo.service", "netdata.service"],
+  "backup_status": "/var/lib/hermes-backup/status.json",
+  "state_directory": "/var/lib/hermes-ops",
+  "alert_cooldown_seconds": 21600,
+  "thresholds": {
+    "cpu_percent": 95,
+    "memory_percent": 90,
+    "disk_percent": 85,
+    "cpu_temperature": 85,
+    "ssd_temperature": 70
+  }
+}
