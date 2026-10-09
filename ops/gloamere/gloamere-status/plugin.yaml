@@ -1,0 +1,4 @@
+name: gloamere-status
+version: 0.1.0
+description: "查询本机服务器资源、温度与备份状态。"
+author: gloamere

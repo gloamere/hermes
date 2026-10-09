@@ -38,6 +38,7 @@ HOST_FILES = (
     "/etc/mihomo/subscription.yaml",
     "/etc/systemd/system/mihomo.service",
     "/etc/systemd/system/hermes-gateway.service",
+    "/etc/systemd/system/hermes-dashboard.service",
     "/etc/systemd/system/hermes-gateway.service.d/proxy.conf",
     "/etc/systemd/system/hermes-gateway.service.d/desktop.conf",
     "/etc/systemd/system/hermes-backup.service",

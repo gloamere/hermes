@@ -1,0 +1,39 @@
+[Unit]
+Description=Hermes Web Dashboard
+After=network-online.target mihomo.service user@1002.service
+Wants=network-online.target mihomo.service user@1002.service
+OnFailure=hermes-alert@%n.service
+
+[Service]
+Type=simple
+User=gloamere
+Group=gloamere
+WorkingDirectory=/home/Gloamere/workspace
+Environment="HOME=/home/Gloamere"
+Environment="HERMES_HOME=/home/Gloamere/.hermes"
+Environment="PATH=/home/Gloamere/.hermes/tools/node-26.7.0-linux-x64/bin:/home/Gloamere/.hermes/tools/npm-12.0.2-linux-x64/bin:/home/Gloamere/hermes/node_modules/.bin:/home/Gloamere/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+Environment="XDG_RUNTIME_DIR=/run/user/1002"
+Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1002/bus"
+Environment="HTTP_PROXY=http://127.0.0.1:7890"
+Environment="HTTPS_PROXY=http://127.0.0.1:7890"
+Environment="ALL_PROXY=http://127.0.0.1:7890"
+Environment="http_proxy=http://127.0.0.1:7890"
+Environment="https_proxy=http://127.0.0.1:7890"
+Environment="all_proxy=http://127.0.0.1:7890"
+Environment="NO_PROXY=localhost,127.0.0.1,::1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+Environment="no_proxy=localhost,127.0.0.1,::1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+Environment="WS_PROXY=http://127.0.0.1:7890"
+Environment="WSS_PROXY=http://127.0.0.1:7890"
+Environment="ws_proxy=http://127.0.0.1:7890"
+Environment="wss_proxy=http://127.0.0.1:7890"
+ExecStart=/home/Gloamere/hermes/.hermes/bin/hermes dashboard --host 127.0.0.1 --port 9119 --no-open --skip-build
+Restart=on-failure
+RestartSec=10
+RestartPreventExitStatus=78
+KillMode=mixed
+TimeoutStopSec=40
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
