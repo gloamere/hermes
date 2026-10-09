@@ -1,0 +1,31 @@
+# Merge into the existing config with hermes_cli.config.atomic_config_write.
+# Credentials and provider settings stay in the private Hermes home.
+timezone: Asia/Shanghai
+agent:
+  reasoning_effort: medium
+  service_tier: fast
+delegation:
+  max_concurrent_children: 3
+curator:
+  enabled: true
+  interval_hours: 168
+  min_idle_hours: 2
+  consolidate: true
+  prune_builtins: false
+  backup:
+    enabled: true
+    keep: 2
+stt:
+  enabled: true
+  provider: local
+  language: zh
+  local:
+    model: base
+    language: zh
+    device: cpu
+    compute_type: int8
+    unload_after_idle_seconds: 600
+tts:
+  provider: edge
+  edge:
+    voice: zh-CN-XiaoxiaoNeural
