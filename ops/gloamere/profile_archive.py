@@ -64,7 +64,7 @@ def digest(path):
 
 
 def run(args, *, cwd=None):
-    result = subprocess.run(args, cwd=cwd, capture_output=True, timeout=1800)
+    result = subprocess.run(args, cwd=cwd, capture_output=True, timeout=1800, check=False)
     with (BASE / "logs/last-run.log").open("ab") as log:
         log.write(("COMMAND: " + " ".join(map(str, args)) + "\n").encode())
         log.write(result.stdout)

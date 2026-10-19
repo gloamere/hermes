@@ -101,13 +101,19 @@ class MessageEvent:
     # knows the message was meant for someone else); None means unknown and keeps the visible
     # fallback, like True.
     reply_expected: Optional[bool] = None
+    # Set for synthetic turns that carry no channel inputs of their own (goal continuation,
+    # heartbeat due-prompts, /goal resume) so the turn reuses the session's pinned channel
+    # prompt/parent instead of overwriting it with this event's own None (#126109). Independent
+    # of ``internal``: these events still go through user authorization. Appended after
+    # ``reply_expected`` for positional compat (see the field-order rule above).
+    inherit_channel_pin: bool = False
 
     # Process-local admission receipt, never routing metadata or execution acknowledgement.
     _gateway_accepted: bool = field(default=False, init=False, repr=False, compare=False)
     # Run-owned final presentation snapshot; never deserialized from ingress metadata.
     _notification_reply_muted: Optional[bool] = field(default=None, init=False, repr=False, compare=False)
 
-    def absorb_reply_expected(self, other: MessageEvent) -> None:
+    def absorb_reply_expected(self, other: "MessageEvent") -> None:
         """One turn now answers *other* too: an addressed message wins, then an unknown one."""
         if self.reply_expected is not True and other.reply_expected is not False:
             self.reply_expected = other.reply_expected
